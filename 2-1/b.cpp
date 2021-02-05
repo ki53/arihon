@@ -1,34 +1,60 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b; return true; } return false;}
-template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b; return true; } return false;}
-int ctoi(char c) {return (int)c-48;}
-char itoc(int i) {return (char)(i+48);}
-template<class T> inline int binary_search(vector<T>& a, int key) {
-    int ng = -1;
-    int ok = (int)a.size();
-    while (abs(ok - ng) > 1) {
-        int mid = (ok + ng) / 2;
-        if (a[mid] >= key) ok = mid;
-        else ng = mid;
-    }
-    return ok;
-}
-
-const long long INF = 1LL << 60;
+// lake counting poj 2386
 
 // input 
-long long n;
+int n, m;
+string field[110];
+
+int dfs(int y, int x) {
+    field[y][x] = '.';
+
+    for (int dx=-1; dx<=1; ++dx) {
+        for (int dy=-1; dy<=1; ++dy) {
+            int nx = x + dx, ny = y + dy;
+            if (0 <= nx && nx <= m && 0 <= ny && ny <= n && field[ny][nx] == 'W') dfs(ny, nx);
+        }
+    }
+
+    return 0;
+}
 
 int solve() {
+    int res = 0;
+    for (int i=0; i<n; ++i) {
+        for (int j=0; j<m; ++j) {
+            if (field[i][j] == 'W') {
+                dfs(i, j);
+                ++res;
+            }
+        }
+    }
+
+    cout << res << endl;
 
     return 0;
 }
 
 int main() {
+    cin >> n >> m;
+    for (int i=0; i<n; ++i) cin >> field[i];
 
     solve();
 
     return 0;
 }
+
+/* example
+10 12 
+W........WW.
+.WWW.....WWW
+....WW...WW.
+.........WW.
+.........W..
+..W......W..
+.W.W.....WW.
+W.W.W.....W.
+.W.W......W.
+..W.......W.
+*/
